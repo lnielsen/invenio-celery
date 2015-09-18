@@ -17,27 +17,25 @@
 # along with Invenio; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place, Suite 330, Boston, MA 02111-1307, USA.
 
-"""
-Invenio Celery unit tests
-"""
+"""Invenio Celery unit tests."""
 
 from __future__ import absolute_import
 
-from invenio.testsuite import make_test_suite, run_test_suite
-from invenio.celery.testsuite.helpers import CeleryTestCase
+from helpers import CeleryTestCase
 
 
 class CeleryTest(CeleryTestCase):
+
     def test_loader(self):
-        """ Test if `workers.py` files are correctly registered. """
-        self.assertTrue('invenio.celery.tasks.invenio_version' in
+        """Test if `workers.py` files are correctly registered."""
+        self.assertTrue('invenio_celery.tasks.invenio_version' in
                         self.celery_app.tasks)
 
     def test_task_invenio_version(self):
-        """ Test calling of tasks """
+        """Test calling of tasks."""
 
         from invenio_base.globals import cfg
-        from invenio.celery.tasks import invenio_version
+        from invenio_celery.tasks import invenio_version
 
         # Call task function without celery
         self.assertEqual(invenio_version(), cfg['CFG_VERSION'])
@@ -45,8 +43,8 @@ class CeleryTest(CeleryTestCase):
         self.assertEqual(invenio_version.delay().get(), cfg['CFG_VERSION'])
 
     def test_task_invenio_db_test(self):
-        """ Test Flask request context in tasks """
-        from invenio.celery.tasks import invenio_db_test
+        """Test Flask request context in tasks."""
+        from invenio_celery.tasks import invenio_db_test
 
         # Call task via Celery machinery
         self.assertEqual(invenio_db_test.delay(1).get(), 1)
@@ -56,9 +54,3 @@ class CeleryTest(CeleryTestCase):
         # Call task without Celery machinery.
         with self.celery_app.loader.flask_app.test_request_context():
             self.assertEqual(invenio_db_test(1), 1)
-
-
-TEST_SUITE = make_test_suite(CeleryTest)
-
-if __name__ == "__main__":
-    run_test_suite(TEST_SUITE)

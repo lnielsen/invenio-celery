@@ -21,7 +21,7 @@
 
 import time
 
-from invenio.celery import celery
+from invenio_celery import celery
 
 
 def get_queues():

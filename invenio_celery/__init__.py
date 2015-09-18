@@ -17,10 +17,9 @@
 # along with Invenio; if not, write to the Free Software Foundation, Inc.,
 # 59 Temple Place, Suite 330, Boston, MA 02111-1307, USA.
 
-"""
-Invenio Celery Loader
+"""Invenio Celery Loader.
 
-The loader's purposes is to load modules defined in invenio.*_tasks modules
+The loader's purposes is to load modules defined in invenio.*_tasks modules.
 """
 
 # Important for 'from celery import Celery' to find the right celery module.
@@ -30,6 +29,7 @@ from celery import Celery, signals
 from celery.loaders.base import BaseLoader
 
 from . import registry
+from .version import __version__
 
 
 class InvenioLoader(BaseLoader):
@@ -64,7 +64,7 @@ class InvenioLoader(BaseLoader):
             else:
                 from invenio_base.factory import create_app
                 self.flask_app = create_app(CELERY_CONTEXT=True)
-                from invenio.ext.sqlalchemy import db
+                from invenio_ext.sqlalchemy import db
                 self.db = db
 
     def on_task_init(self, task_id, task):
@@ -122,8 +122,8 @@ class InvenioLoader(BaseLoader):
         self.close_database()
 
     def read_configuration(self):
-        """ Read configuration defined in invenio.celery.config """
-        from invenio.celery.config import default_config
+        """Read configuration defined in ``.config``."""
+        from .config import default_config
         self._init_flask()
         self.configured = True
         return default_config(self.flask_app.config)
@@ -143,10 +143,8 @@ class InvenioLoader(BaseLoader):
             self.autodiscover()
 
     def autodiscover(self):
-        """
-        Discover task modules named 'invenio.modules.*.tasks'
-        """
-        from invenio.celery import tasks
+        """Discover task modules from tasks registry."""
+        from . import tasks
         self.task_modules.update(tasks.__name__)
         self.task_modules.update(
             mod.__name__ for mod in registry.tasks or ())
@@ -159,3 +157,5 @@ celery = Celery(
     'invenio',
     loader=InvenioLoader,
 )
+
+__all__ = ('__version__', 'celery')

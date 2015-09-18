@@ -34,7 +34,7 @@ def default_config(config):
     # The Invenio Celery loader automatically takes care of loading tasks
     # defined in *_tasks.py files in 'invenio' package.
     config.setdefault("CELERY_INCLUDE", [
-        # "invenio.celery.tasks",
+        # "invenio_celery.tasks",
         # "invenio_workflows.workers.worker_celery",
     ])
 
@@ -66,7 +66,7 @@ def default_config(config):
     # ------------
     config.setdefault("CELERY_SEND_TASK_ERROR_EMAILS", False)
 
-    # Note ADMINS is also set by invenio.ext.email
+    # Note ADMINS is also set by invenio_ext.email
     if config.get('CFG_SITE_ADMIN_EMAIL'):
         config.setdefault(
             'ADMINS',
