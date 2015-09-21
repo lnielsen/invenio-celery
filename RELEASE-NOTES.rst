@@ -2,7 +2,7 @@
  Invenio-Celery v0.1.0
 =======================
 
-Invenio-Celery v0.1.0 was released on TBD, 2015.
+Invenio-Celery v0.1.0 was released on September 21, 2015.
 
 About
 -----
