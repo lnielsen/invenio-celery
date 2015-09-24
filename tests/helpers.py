@@ -23,12 +23,13 @@ from __future__ import absolute_import
 
 from celery import Celery
 
-from invenio.testsuite import InvenioTestCase
-
 from invenio_celery import InvenioLoader
+
+from invenio_testing import InvenioTestCase
 
 
 class CeleryTestCase(InvenioTestCase):
+
     def create_celery_app(self):
         # Execute tasks synchronously
         self.app.config['CELERY_ALWAYS_EAGER'] = True
