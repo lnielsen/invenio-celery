@@ -27,6 +27,7 @@ from __future__ import absolute_import
 
 from celery import Celery, signals
 from celery.loaders.base import BaseLoader
+from flask import has_app_context
 
 from . import registry
 from .version import __version__
@@ -131,6 +132,8 @@ class InvenioLoader(BaseLoader):
     def close_database(self, **dummy_kwargs):
         if self.db:
             self.db.session.remove()
+            if has_app_context():
+                self.db.engine.dispose()
 
     def import_default_modules(self):
         """ Called before on_worker_init """
