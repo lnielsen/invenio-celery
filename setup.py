@@ -38,6 +38,7 @@ requirements = [
     'celery>=3.1.8',
     'invenio-base>=0.3.0',
     'invenio-ext>=0.1.0',
+    'msgpack-python>=0.3',
     'six>=1.7.2',
 ]
 
