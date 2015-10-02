@@ -37,7 +37,7 @@ requirements = [
     'Flask>=0.10.1',
     'celery>=3.1.8',
     'invenio-base>=0.3.0',
-    'invenio-ext>=0.1.0',
+    'invenio-ext>=0.2.1',
     'msgpack-python>=0.3',
     'six>=1.7.2',
 ]
