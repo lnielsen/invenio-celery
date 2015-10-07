@@ -28,4 +28,4 @@ This file is imported by ``invenio_celery.__init__``,
 and parsed by ``setup.py``.
 """
 
-__version__ = "0.1.2.dev20151002"
+__version__ = "0.2.0.dev20151007"
