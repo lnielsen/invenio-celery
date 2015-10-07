@@ -22,8 +22,23 @@
 # waive the privileges and immunities granted to it by virtue of its status
 # as an Intergovernmental Organization or submit itself to any jurisdiction.
 
-[tox]
-envlist = py27
 
-[testenv]
-commands = {envpython} setup.py test
+"""Pytest configuration."""
+
+from __future__ import absolute_import, print_function
+
+import pytest
+from flask import Flask
+
+
+@pytest.fixture()
+def app():
+    """Flask app fixture."""
+    app = Flask("testapp")
+    app.config.update(dict(
+        CELERY_ALWAYS_EAGER=True,
+        CELERY_RESULT_BACKEND="cache",
+        CELERY_CACHE_BACKEND="memory",
+        CELERY_EAGER_PROPAGATES_EXCEPTIONS=True))
+
+    return app

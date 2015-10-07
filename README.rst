@@ -41,9 +41,9 @@
         :target: https://github.com/inveniosoftware/invenio-celery/blob/master/LICENSE
 
 
-Integration layer between Celery and Invenio.
+Celery module for Invenio.
 
 *This is an experimental developer preview release.*
 
 * Free software: GPLv2 license
-* Documentation: https://invenio-celery.readthedocs.org.
+* Documentation: https://pythonhosted.org/invenio-celery/
