@@ -122,7 +122,14 @@ setup(
     zip_safe=False,
     include_package_data=True,
     platforms='any',
-    entry_points={},
+    entry_points={
+        'invenio_base.apps': [
+            'invenio_celery = invenio_celery:InvenioCelery'
+        ],
+        'invenio_base.api_apps': [
+            'invenio_celery = invenio_celery:InvenioCelery'
+        ],
+    },
     extras_require=extras_require,
     install_requires=install_requires,
     setup_requires=setup_requires,
