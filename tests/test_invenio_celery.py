@@ -22,13 +22,29 @@
 # waive the privileges and immunities granted to it by virtue of its status
 # as an Intergovernmental Organization or submit itself to any jurisdiction.
 
-"""Tests."""
+"""Test InvenioCelery extension."""
 
 from __future__ import absolute_import, print_function
 
-from mock import MagicMock
+from mock import MagicMock, patch
+from pkg_resources import EntryPoint
 
 from invenio_celery import InvenioCelery
+
+
+def _mock_entry_points(group, name=None):
+    """Return EntryPoints from different groups."""
+    data = {
+        'only_first_tasks': [EntryPoint('first_tasks', 'first_tasks')],
+        'only_second_tasks': [EntryPoint('second_tasks', 'second_tasks')],
+        'invenio_celery.tasks': [
+            EntryPoint('first_tasks', 'first_tasks'),
+            EntryPoint('second_tasks', 'second_tasks'),
+        ],
+    }
+    assert name is None
+    for entry_point in data[group]:
+        yield entry_point
 
 
 def test_version():
@@ -50,6 +66,35 @@ def test_init(app):
 
     test1.delay()
     assert called['test1']
+
+
+@patch("pkg_resources.iter_entry_points", _mock_entry_points)
+def test_enabled_autodiscovery(app):
+    """Test shared task detection."""
+    ext = InvenioCelery(app)
+    assert 'conftest.shared_compute' in ext.celery.tasks.keys()
+    assert 'first_tasks.first_task' in ext.celery.tasks.keys()
+    assert 'second_tasks.second_task_a' in ext.celery.tasks.keys()
+    assert 'second_tasks.second_task_b' in ext.celery.tasks.keys()
+
+
+@patch("pkg_resources.iter_entry_points", _mock_entry_points)
+def test_only_first_tasks(app):
+    """Test loading different entrypoint group."""
+    ext = InvenioCelery(app, entrypoint_name='only_first_tasks')
+    assert 'conftest.shared_compute' in ext.celery.tasks.keys()
+    assert 'first_tasks.first_task' in ext.celery.tasks.keys()
+    assert 'second_tasks.second_task_a' not in ext.celery.tasks.keys()
+    assert 'second_tasks.second_task_b' not in ext.celery.tasks.keys()
+
+
+def test_disabled_autodiscovery(app):
+    """Test disabled discovery."""
+    ext = InvenioCelery(app, entrypoint_name=None)
+    assert 'conftest.shared_compute' in ext.celery.tasks.keys()
+    assert 'first_tasks.first_task' not in ext.celery.tasks.keys()
+    assert 'second_tasks.second_task_a' not in ext.celery.tasks.keys()
+    assert 'second_tasks.second_task_b' not in ext.celery.tasks.keys()
 
 
 def test_get_queues(app):

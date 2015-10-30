@@ -28,36 +28,51 @@ from __future__ import absolute_import, print_function
 
 import time
 
+import pkg_resources
 from flask_celeryext import FlaskCeleryExt
 
 
 class InvenioCelery(object):
-    """Invenio theme extension."""
+    """Invenio celery extension."""
 
     def __init__(self, app=None, **kwargs):
         """Extension initialization."""
         self.celery = None
+
         if app:
             self.init_app(app, **kwargs)
 
-    def init_app(self, app, assets=None, **kwargs):
+    def init_app(self, app, assets=None,
+                 entrypoint_name='invenio_celery.tasks', **kwargs):
         """Initialize application object."""
         self.init_config(app.config)
         self.celery = FlaskCeleryExt(app).celery
+
+        if entrypoint_name:
+            task_packages = []
+            for item in pkg_resources.iter_entry_points(
+                    group=entrypoint_name):
+                task_packages.append(item.module_name)
+
+            if task_packages:
+                self.celery.autodiscover_tasks(
+                    task_packages, related_name='', force=True
+                )
+
         app.extensions['invenio-celery'] = self
 
     def init_config(self, config):
         """Initialize configuration."""
-        config.setdefault("BROKER_URL", "redis://localhost:6379/0")
-        config.setdefault("CELERY_RESULT_BACKEND", "redis://localhost:6379/1")
-        config.setdefault("CELERY_ACCEPT_CONTENT", ['json', 'msgpack', 'yaml'])
-        config.setdefault("CELERY_RESULT_SERIALIZER", "msgpack")
-        config.setdefault("CELERY_TASK_SERIALIZER", "msgpack")
+        config.setdefault('BROKER_URL', 'redis://localhost:6379/0')
+        config.setdefault('CELERY_RESULT_BACKEND', 'redis://localhost:6379/1')
+        config.setdefault('CELERY_ACCEPT_CONTENT', ['json', 'msgpack', 'yaml'])
+        config.setdefault('CELERY_RESULT_SERIALIZER', 'msgpack')
+        config.setdefault('CELERY_TASK_SERIALIZER', 'msgpack')
 
     def get_queues(self):
         """Return a list of current active Celery queues."""
         res = self.celery.control.inspect().active_queues() or dict()
-        return [result.get("name") for host in res.values() for result in host]
+        return [result.get('name') for host in res.values() for result in host]
 
     def disable_queue(self, name):
         """Disable given Celery queue."""
@@ -71,7 +86,7 @@ class InvenioCelery(object):
         """Return a list of UUIDs of active tasks."""
         current_tasks = self.celery.control.inspect().active() or dict()
         return [
-            task.get("id") for host in current_tasks.values() for task in host]
+            task.get('id') for host in current_tasks.values() for task in host]
 
     def suspend_queues(self, active_queues, sleep_time=10.0):
         """Suspend Celery queues and wait for running tasks to complete."""
