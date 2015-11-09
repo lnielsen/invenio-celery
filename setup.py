@@ -56,9 +56,7 @@ extras_require['all'] = []
 for reqs in extras_require.values():
     extras_require['all'].extend(reqs)
 
-setup_requires = [
-    'Babel>=1.3',
-]
+setup_requires = []
 
 install_requires = [
     'Flask-CeleryExt>=0.1.0',
