@@ -81,7 +81,7 @@ def test_enabled_autodiscovery(app):
 @patch("pkg_resources.iter_entry_points", _mock_entry_points)
 def test_only_first_tasks(app):
     """Test loading different entrypoint group."""
-    ext = InvenioCelery(app, entrypoint_name='only_first_tasks')
+    ext = InvenioCelery(app, entry_point_group='only_first_tasks')
     assert 'conftest.shared_compute' in ext.celery.tasks.keys()
     assert 'first_tasks.first_task' in ext.celery.tasks.keys()
     assert 'second_tasks.second_task_a' not in ext.celery.tasks.keys()
@@ -90,7 +90,7 @@ def test_only_first_tasks(app):
 
 def test_disabled_autodiscovery(app):
     """Test disabled discovery."""
-    ext = InvenioCelery(app, entrypoint_name=None)
+    ext = InvenioCelery(app, entry_point_group=None)
     assert 'conftest.shared_compute' in ext.celery.tasks.keys()
     assert 'first_tasks.first_task' not in ext.celery.tasks.keys()
     assert 'second_tasks.second_task_a' not in ext.celery.tasks.keys()
