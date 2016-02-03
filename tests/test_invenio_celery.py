@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 # This file is part of Invenio.
-# Copyright (C) 2015 CERN.
+# Copyright (C) 2015, 2016 CERN.
 #
 # Invenio is free software; you can redistribute it
 # and/or modify it under the terms of the GNU General Public License as
@@ -72,6 +72,7 @@ def test_init(app):
 def test_enabled_autodiscovery(app):
     """Test shared task detection."""
     ext = InvenioCelery(app)
+    ext.load_entry_points()
     assert 'conftest.shared_compute' in ext.celery.tasks.keys()
     assert 'first_tasks.first_task' in ext.celery.tasks.keys()
     assert 'second_tasks.second_task_a' in ext.celery.tasks.keys()
@@ -82,6 +83,7 @@ def test_enabled_autodiscovery(app):
 def test_only_first_tasks(app):
     """Test loading different entrypoint group."""
     ext = InvenioCelery(app, entry_point_group='only_first_tasks')
+    ext.load_entry_points()
     assert 'conftest.shared_compute' in ext.celery.tasks.keys()
     assert 'first_tasks.first_task' in ext.celery.tasks.keys()
     assert 'second_tasks.second_task_a' not in ext.celery.tasks.keys()
@@ -91,10 +93,20 @@ def test_only_first_tasks(app):
 def test_disabled_autodiscovery(app):
     """Test disabled discovery."""
     ext = InvenioCelery(app, entry_point_group=None)
+    ext.load_entry_points()
     assert 'conftest.shared_compute' in ext.celery.tasks.keys()
     assert 'first_tasks.first_task' not in ext.celery.tasks.keys()
     assert 'second_tasks.second_task_a' not in ext.celery.tasks.keys()
     assert 'second_tasks.second_task_b' not in ext.celery.tasks.keys()
+
+
+@patch("pkg_resources.iter_entry_points", _mock_entry_points)
+def test_worker_loading(app):
+    """Test that tasks are only loaded on the worker."""
+    ext = InvenioCelery(app)
+    assert 'first_tasks.first_task' not in ext.celery.tasks.keys()
+    ext.celery.loader.import_default_modules()
+    assert 'first_tasks.first_task' in ext.celery.tasks.keys()
 
 
 def test_get_queues(app):

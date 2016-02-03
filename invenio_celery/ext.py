@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 # This file is part of Invenio.
-# Copyright (C) 2015 CERN.
+# Copyright (C) 2015, 2016 CERN.
 #
 # Invenio is free software; you can redistribute it
 # and/or modify it under the terms of the GNU General Public License as
@@ -30,6 +30,7 @@ import time
 
 import pkg_resources
 from flask_celeryext import FlaskCeleryExt
+from celery.signals import import_modules
 
 
 class InvenioCelery(object):
@@ -47,19 +48,21 @@ class InvenioCelery(object):
         """Initialize application object."""
         self.init_config(app.config)
         self.celery = FlaskCeleryExt(app).celery
+        self.entry_point_group = entry_point_group
+        app.extensions['invenio-celery'] = self
 
-        if entry_point_group:
+    def load_entry_points(self):
+        """Load tasks from entry points."""
+        if self.entry_point_group:
             task_packages = []
             for item in pkg_resources.iter_entry_points(
-                    group=entry_point_group):
+                    group=self.entry_point_group):
                 task_packages.append(item.module_name)
 
             if task_packages:
                 self.celery.autodiscover_tasks(
                     task_packages, related_name='', force=True
                 )
-
-        app.extensions['invenio-celery'] = self
 
     def init_config(self, config):
         """Initialize configuration."""
@@ -94,3 +97,11 @@ class InvenioCelery(object):
             self.disable_queue(queue)
         while self.get_active_tasks():
             time.sleep(sleep_time)
+
+
+@import_modules.connect()
+def celery_module_imports(sender, signal=None, **kwargs):
+    """Load shared celery tasks."""
+    app = getattr(sender, 'flask_app', None)
+    if app:
+        app.extensions['invenio-celery'].load_entry_points()

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 # This file is part of Invenio.
-# Copyright (C) 2015 CERN.
+# Copyright (C) 2015, 2016 CERN.
 #
 # Invenio is free software; you can redistribute it
 # and/or modify it under the terms of the GNU General Public License as
@@ -29,12 +29,12 @@ from __future__ import absolute_import, print_function
 
 import sys
 
-from celery import shared_task
+from celery import shared_task, Celery
 from flask import Flask
 import pytest
 
 
-@pytest.fixture()
+@pytest.yield_fixture()
 def app(request):
     """Flask app fixture."""
     app = Flask("testapp")
@@ -50,19 +50,17 @@ def app(request):
         """Dummy function."""
         pass
 
-    def teardown():
-        """Clear global celery state."""
-        import celery._state
-        celery._state._apps.discard(
-            app.extensions['invenio-celery'].celery
-        )
-        celery._state._on_app_finalizers = set()
+    yield app
 
-        # Clear our modules to get them re-imported by Celery.
-        if 'first_tasks' in sys.modules:
-            del sys.modules['first_tasks']
-        if 'second_tasks' in sys.modules:
-            del sys.modules['second_tasks']
+    import celery._state
+    celery._state._apps.discard(
+        app.extensions['invenio-celery'].celery._get_current_object()
+    )
+    celery._state._on_app_finalizers = set()
+    celery._state.set_default_app(Celery())
 
-    request.addfinalizer(teardown)
-    return app
+    # Clear our modules to get them re-imported by Celery.
+    if 'first_tasks' in sys.modules:
+        del sys.modules['first_tasks']
+    if 'second_tasks' in sys.modules:
+        del sys.modules['second_tasks']
