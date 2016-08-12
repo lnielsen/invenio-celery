@@ -19,13 +19,13 @@ Installation
 Documentation
 -------------
 
-   http://pythonhosted.org/invenio-celery/
+   https://pythonhosted.org/invenio-celery/
 
 Happy hacking and thanks for flying Invenio-Celery.
 
 | Invenio Development Team
 |   Email: info@inveniosoftware.org
 |   IRC: #invenio on irc.freenode.net
-|   Twitter: http://twitter.com/inveniosoftware
+|   Twitter: https://twitter.com/inveniosoftware
 |   GitHub: https://github.com/inveniosoftware/invenio-celery
 |   URL: http://inveniosoftware.org

@@ -42,7 +42,6 @@ tests_require = [
     'pytest-cache>=1.0',
     'pytest-cov>=1.8.0',
     'pytest-pep8>=1.0.6',
-    'pytest-runner>=2.7.1',
     'pytest>=2.8.0',
 ]
 
@@ -57,10 +56,13 @@ extras_require['all'] = []
 for reqs in extras_require.values():
     extras_require['all'].extend(reqs)
 
-setup_requires = []
+setup_requires = [
+    'pytest-runner>=2.7.1',
+]
 
 install_requires = [
     'Flask-CeleryExt>=0.2.0',
+    'Flask>=0.11',
     'redis>=2.10.0',
     'msgpack-python>=0.4.6',
 ]
@@ -110,9 +112,9 @@ setup(
         'Programming Language :: Python :: 2',
         'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.3',
-        'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
-        'Development Status :: 3 - Alpha',
+        'Programming Language :: Python :: Implementation :: CPython',
+        'Programming Language :: Python :: Implementation :: PyPy',
+        'Development Status :: 4 - Beta',
     ],
 )
