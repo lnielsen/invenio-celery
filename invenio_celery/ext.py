@@ -32,6 +32,8 @@ import pkg_resources
 from flask_celeryext import FlaskCeleryExt
 from celery.signals import import_modules
 
+from . import config
+
 
 class InvenioCelery(object):
     """Invenio celery extension."""
@@ -46,7 +48,7 @@ class InvenioCelery(object):
     def init_app(self, app, assets=None,
                  entry_point_group='invenio_celery.tasks', **kwargs):
         """Initialize application object."""
-        self.init_config(app.config)
+        self.init_config(app)
         self.celery = FlaskCeleryExt(app).celery
         self.entry_point_group = entry_point_group
         app.extensions['invenio-celery'] = self
@@ -64,13 +66,11 @@ class InvenioCelery(object):
                     task_packages, related_name='', force=True
                 )
 
-    def init_config(self, config):
+    def init_config(self, app):
         """Initialize configuration."""
-        config.setdefault('BROKER_URL', 'redis://localhost:6379/0')
-        config.setdefault('CELERY_RESULT_BACKEND', 'redis://localhost:6379/1')
-        config.setdefault('CELERY_ACCEPT_CONTENT', ['json', 'msgpack', 'yaml'])
-        config.setdefault('CELERY_RESULT_SERIALIZER', 'msgpack')
-        config.setdefault('CELERY_TASK_SERIALIZER', 'msgpack')
+        for k in dir(config):
+            if k.startswith('CELERY_') or k.startswith('BROKER_'):
+                app.config.setdefault(k, getattr(config, k))
 
     def get_queues(self):
         """Return a list of current active Celery queues."""

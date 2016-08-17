@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 # This file is part of Invenio.
-# Copyright (C) 2013, 2014, 2015, 2016 CERN.
+# Copyright (C) 2016 CERN.
 #
 # Invenio is free software; you can redistribute it
 # and/or modify it under the terms of the GNU General Public License as
@@ -22,27 +22,19 @@
 # waive the privileges and immunities granted to it by virtue of its status
 # as an Intergovernmental Organization or submit itself to any jurisdiction.
 
-"""Celery module for Invenio.
+"""Default configuration values for Celery integration."""
 
-Invenio-Celery is a core component of Invenio responsible for integrating
-Celery using Flask-CeleryExt and by providing reasonable configuration
-defaults.
+BROKER_URL = 'redis://localhost:6379/0'
+"""Broker settings."""
 
-Configuration
--------------
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/1'
+"""The backend used to store task results."""
 
-.. automodule:: invenio_celery.config
-   :members:
+CELERY_ACCEPT_CONTENT = ['json', 'msgpack', 'yaml']
+"""A whitelist of content-types/serializers."""
 
-For further details on Celery configuration and Flask-CeleryExt usage see:
+CELERY_RESULT_SERIALIZER = 'msgpack'
+"""Result serialization format. Default is ``msgpack``."""
 
- * http://docs.celeryproject.org/en/latest/configuration.html
- * https://pythonhosted.org/Flask-CeleryExt/
-"""
-
-from __future__ import absolute_import, print_function
-
-from .ext import InvenioCelery
-from .version import __version__
-
-__all__ = ('__version__', 'InvenioCelery')
+CELERY_TASK_SERIALIZER = 'msgpack'
+"""The default serialization method to use. Default is ``msgpack``."""
