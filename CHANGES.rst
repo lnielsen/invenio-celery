@@ -25,8 +25,10 @@
 Changes
 =======
 
-Version 1.0.0a4 (released 2016-02-28)
+Version 1.0.0b1 (released 2016-09-06)
 -------------------------------------
+
+- Refactoring for Invenio 3.
 
 Version 0.1.1 (released 2015-10-02)
 -----------------------------------
