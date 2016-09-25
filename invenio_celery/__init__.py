@@ -37,7 +37,7 @@ Configuration
 For further details on Celery configuration and Flask-CeleryExt usage see:
 
  * http://docs.celeryproject.org/en/latest/configuration.html
- * https://pythonhosted.org/Flask-CeleryExt/
+ * https://Flask-CeleryExt.readthedocs.io/
 """
 
 from __future__ import absolute_import, print_function

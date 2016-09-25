@@ -19,7 +19,7 @@ Installation
 Documentation
 -------------
 
-   https://pythonhosted.org/invenio-celery/
+   https://invenio-celery.readthedocs.io/
 
 Happy hacking and thanks for flying Invenio-Celery.
 
