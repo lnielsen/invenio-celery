@@ -41,9 +41,11 @@
         :target: https://github.com/inveniosoftware/invenio-celery/blob/master/LICENSE
 
 
-Celery module for Invenio.
+Celery distributed task queue module for Invenio.
 
-*This is an experimental developer preview release.*
+Invenio-Celery is a small discovery layer that takes care of discovering and
+loading tasks from other Invenio modules, as well as providing configuration
+defaults for Celery usage in Invenio. Invenio-Celery relies on Flask-CeleryExt
+for integrating Flask and Celery with application factories.
 
-* Free software: GPLv2 license
-* Documentation: https://invenio-celery.readthedocs.io/
+Further documentation is available on https://invenio-celery.readthedocs.io/

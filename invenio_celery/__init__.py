@@ -22,22 +22,64 @@
 # waive the privileges and immunities granted to it by virtue of its status
 # as an Intergovernmental Organization or submit itself to any jurisdiction.
 
-"""Celery module for Invenio.
+"""Celery distributed task queue module for Invenio.
 
-Invenio-Celery is a core component of Invenio responsible for integrating
-Celery using Flask-CeleryExt and by providing reasonable configuration
-defaults.
+Invenio-Celery is a small discovery layer that takes care of discovering and
+loading tasks from other Invenio modules, as well as providing configuration
+defaults for Celery usage in Invenio. Invenio-Celery relies on Flask-CeleryExt
+for integrating Flask and Celery with application factories.
 
-Configuration
--------------
+Defining tasks
+--------------
+Invenio modules that wish to define Celery tasks should use the
+``@shared_task`` decorator (usually in ``tasks.py``):
 
-.. automodule:: invenio_celery.config
-   :members:
+.. code-block:: python
 
-For further details on Celery configuration and Flask-CeleryExt usage see:
+    # mymodule/tasks.py
+    from celery import shared_task
 
- * http://docs.celeryproject.org/en/latest/configuration.html
- * https://Flask-CeleryExt.readthedocs.io/
+    @shared_task
+    def sum(x, y):
+     return x + y
+
+Additionally the Invenio module should add the task module into the
+``invenio_celery.tasks`` entry point:
+
+.. code-block:: python
+
+    # setup.py
+    setup(
+        # ...
+        entry_points=[
+            'invenio_celery.tasks' : [
+                'mymodule = mymodule.tasks'
+            ]
+        ]
+    )
+
+Using tasks
+-----------
+Invenio modules that need to call tasks do not need to do anything special as
+long as the Invenio-Celery extension has been initialized. Hence calling tasks
+is as simple as:
+
+.. code-block:: python
+
+    from mymoudle.tasks import sum
+    result = sum.delay(2, 2)
+
+
+Celery workers
+--------------
+Invenio-Celery hooks into the Celery application loading process so that when
+a worker starts, all the tasks modules defined in ``invenio_celery.tasks`` will
+be imported and cause the tasks to be registered in the worker. Note that this
+only happens on the Celery worker side which needs to know upfront all the
+possible tasks.
+
+For further details on how to setup Celery and define an Celery application
+factory please see `Flask-CeleryExt <https://flask-celeryext.readthedocs.io/>`_
 """
 
 from __future__ import absolute_import, print_function

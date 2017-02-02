@@ -132,7 +132,7 @@ todo_include_todos = False
 html_theme = 'alabaster'
 
 html_theme_options = {
-    'description': 'Celery module for Invenio.',
+    'description': 'Celery distributed task queue module for Invenio.',
     'github_user': 'inveniosoftware',
     'github_repo': 'invenio-celery',
     'github_button': False,

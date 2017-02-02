@@ -22,7 +22,12 @@
 # waive the privileges and immunities granted to it by virtue of its status
 # as an Intergovernmental Organization or submit itself to any jurisdiction.
 
-"""Default configuration values for Celery integration."""
+"""Default configuration values for Celery integration.
+
+For further Celery configuration variables see
+`Celery <http://docs.celeryproject.org/en/3.1/configuration.html>`_
+documentation.
+"""
 
 BROKER_URL = 'redis://localhost:6379/0'
 """Broker settings."""
