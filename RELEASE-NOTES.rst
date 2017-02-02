@@ -1,20 +1,18 @@
 =========================
- Invenio-Celery v1.0.0b1
+ Invenio-Celery v1.0.0b2
 =========================
 
-Invenio-Celery v1.0.0b1 was released on September 6, 2016.
+Invenio-Celery v1.0.0b2 was released on February 2, 2017.
 
 About
 -----
 
 Integration layer between Celery and Invenio.
 
-*This is an experimental developer preview release.*
-
 Installation
 ------------
 
-   $ pip install invenio-celery==1.0.0b1
+   $ pip install invenio-celery==1.0.0b2
 
 Documentation
 -------------
