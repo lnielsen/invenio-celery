@@ -45,8 +45,8 @@ class InvenioCelery(object):
         if app:
             self.init_app(app, **kwargs)
 
-    def init_app(self, app, assets=None,
-                 entry_point_group='invenio_celery.tasks', **kwargs):
+    def init_app(self, app, entry_point_group='invenio_celery.tasks',
+                 **kwargs):
         """Initialize application object."""
         self.init_config(app)
         self.celery = FlaskCeleryExt(app).celery
