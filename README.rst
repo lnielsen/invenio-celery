@@ -1,3 +1,10 @@
+..
+    This file is part of Invenio.
+    Copyright (C) 2015-2018 CERN.
+
+    Invenio is free software; you can redistribute it and/or modify it
+    under the terms of the MIT License; see LICENSE file for more details.
+
 ================
  Invenio-Celery
 ================
@@ -8,14 +15,8 @@
 .. image:: https://img.shields.io/coveralls/inveniosoftware/invenio-celery.svg
         :target: https://coveralls.io/r/inveniosoftware/invenio-celery
 
-.. image:: https://img.shields.io/github/tag/inveniosoftware/invenio-celery.svg
-        :target: https://github.com/inveniosoftware/invenio-celery/releases
-
-.. image:: https://img.shields.io/pypi/dm/invenio-celery.svg
-        :target: https://pypi.python.org/pypi/invenio-celery
-
-.. image:: https://img.shields.io/github/license/inveniosoftware/invenio-celery.svg
-        :target: https://github.com/inveniosoftware/invenio-celery/blob/master/LICENSE
+.. image:: https://img.shields.io/pypi/v/invenio-celery.svg
+        :target: https://pypi.org/pypi/invenio-celery
 
 
 Celery distributed task queue module for Invenio.

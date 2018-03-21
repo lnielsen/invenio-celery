@@ -8,13 +8,11 @@
 
 include .dockerignore
 include .editorconfig
-include .lgtm
 include *.rst
 include *.sh
 include *.txt
 include docs/requirements.txt
 include LICENSE
-include MAINTAINERS
 include pytest.ini
 prune docs/_build
 recursive-include docs *.bat
