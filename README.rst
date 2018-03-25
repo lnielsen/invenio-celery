@@ -9,6 +9,9 @@
  Invenio-Celery
 ================
 
+.. image:: https://img.shields.io/github/license/inveniosoftware/invenio-celery.svg
+        :target: https://github.com/inveniosoftware/invenio-celery/blob/master/LICENSE
+
 .. image:: https://img.shields.io/travis/inveniosoftware/invenio-celery.svg
         :target: https://travis-ci.org/inveniosoftware/invenio-celery
 
