@@ -8,6 +8,16 @@
 Changes
 =======
 
+Version 1.0.1 (released 2018-12-06)
+
+- Adds support for Celery v4.2. Technically this change is backward
+  incompatible because it is no longer possible to load tasks from bare modules
+  (e.g. mymodule.py in the Python root). This is a constraint imposed by Celery
+  v4.2. We however do not known of any cases where bare modules have been used,
+  and also this design is discouraged so we are not flagging it as a backward
+  incompatible change, in order to have the change readily available for
+  current Invenio version.
+
 Version 1.0.0 (released 2018-03-23)
 
 - Initial public release.
