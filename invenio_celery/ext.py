@@ -11,6 +11,7 @@
 from __future__ import absolute_import, print_function
 
 import time
+import warnings
 
 import pkg_resources
 from celery.signals import import_modules
@@ -40,15 +41,33 @@ class InvenioCelery(object):
     def load_entry_points(self):
         """Load tasks from entry points."""
         if self.entry_point_group:
-            task_packages = []
+            task_packages = {}
             for item in pkg_resources.iter_entry_points(
                     group=self.entry_point_group):
-                task_packages.append(item.module_name)
+                # Celery 4.2 requires autodiscover to be called with
+                # related_name.
+                try:
+                    pkg, related_name = item.module_name.rsplit('.', 1)
+                except ValueError:
+                    warnings.warn(
+                        'The celery task module "{}" was not loaded. '
+                        'Defining modules in bare Python modules is no longer '
+                        'supported due to Celery v4.2 constraints. Please '
+                        'move the module into a Python package.'.format(
+                            item.module_name
+                        ),
+                        RuntimeWarning
+                    )
+                    continue
+                if related_name not in task_packages:
+                    task_packages[related_name] = []
+                task_packages[related_name].append(pkg)
 
             if task_packages:
-                self.celery.autodiscover_tasks(
-                    task_packages, related_name='', force=True
-                )
+                for related_name, packages in task_packages.items():
+                    self.celery.autodiscover_tasks(
+                        packages, related_name=related_name, force=True
+                    )
 
     def init_config(self, app):
         """Initialize configuration."""

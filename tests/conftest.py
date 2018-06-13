@@ -46,7 +46,11 @@ def app(request):
     celery._state.set_default_app(Celery())
 
     # Clear our modules to get them re-imported by Celery.
-    if 'first_tasks' in sys.modules:
-        del sys.modules['first_tasks']
-    if 'second_tasks' in sys.modules:
-        del sys.modules['second_tasks']
+    pkgs = [
+        'bpackage.first_tasks',
+        'bpackage.second_tasks',
+        'apackage.third_tasks',
+    ]
+    for pkg in pkgs:
+        if pkg in sys.modules:
+            del sys.modules[pkg]

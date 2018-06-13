@@ -10,6 +10,7 @@
 
 from __future__ import absolute_import, print_function
 
+import pytest
 from mock import MagicMock, patch
 from pkg_resources import EntryPoint
 
@@ -19,11 +20,13 @@ from invenio_celery import InvenioCelery
 def _mock_entry_points(group, name=None):
     """Return EntryPoints from different groups."""
     data = {
-        'only_first_tasks': [EntryPoint('first_tasks', 'first_tasks')],
-        'only_second_tasks': [EntryPoint('second_tasks', 'second_tasks')],
+        'only_first_tasks': [EntryPoint('bpackage', 'bpackage.first_tasks')],
+        'only_second_tasks': [EntryPoint('bpackage', 'bpackage.second_tasks')],
+        'bare_module_tasks': [EntryPoint('second_tasks', 'second_tasks')],
         'invenio_celery.tasks': [
-            EntryPoint('first_tasks', 'first_tasks'),
-            EntryPoint('second_tasks', 'second_tasks'),
+            EntryPoint('bpackage_1', 'bpackage.first_tasks'),
+            EntryPoint('bpackage_2', 'bpackage.second_tasks'),
+            EntryPoint('apackage', 'apackage.third_tasks'),
         ],
     }
     assert name is None
@@ -58,9 +61,10 @@ def test_enabled_autodiscovery(app):
     ext = InvenioCelery(app)
     ext.load_entry_points()
     assert 'conftest.shared_compute' in ext.celery.tasks.keys()
-    assert 'first_tasks.first_task' in ext.celery.tasks.keys()
-    assert 'second_tasks.second_task_a' in ext.celery.tasks.keys()
-    assert 'second_tasks.second_task_b' in ext.celery.tasks.keys()
+    assert 'bpackage.first_tasks.first_task' in ext.celery.tasks.keys()
+    assert 'bpackage.second_tasks.second_task_a' in ext.celery.tasks.keys()
+    assert 'bpackage.second_tasks.second_task_b' in ext.celery.tasks.keys()
+    assert 'apackage.third_tasks.third_task' in ext.celery.tasks.keys()
 
 
 @patch("pkg_resources.iter_entry_points", _mock_entry_points)
@@ -69,9 +73,18 @@ def test_only_first_tasks(app):
     ext = InvenioCelery(app, entry_point_group='only_first_tasks')
     ext.load_entry_points()
     assert 'conftest.shared_compute' in ext.celery.tasks.keys()
-    assert 'first_tasks.first_task' in ext.celery.tasks.keys()
-    assert 'second_tasks.second_task_a' not in ext.celery.tasks.keys()
-    assert 'second_tasks.second_task_b' not in ext.celery.tasks.keys()
+    assert 'bpackage.first_tasks.first_task' in ext.celery.tasks.keys()
+    assert 'bpackage.second_tasks.second_task_a' not in ext.celery.tasks.keys()
+    assert 'bpackage.second_tasks.second_task_b' not in ext.celery.tasks.keys()
+    assert 'apackage.third_tasks.third_task' not in ext.celery.tasks.keys()
+
+
+@patch("pkg_resources.iter_entry_points", _mock_entry_points)
+def test_bare_module_warning(app):
+    """Test loading different entrypoint group."""
+    ext = InvenioCelery(app, entry_point_group='bare_module_tasks')
+    with pytest.warns(RuntimeWarning):
+        ext.load_entry_points()
 
 
 def test_disabled_autodiscovery(app):
@@ -79,18 +92,19 @@ def test_disabled_autodiscovery(app):
     ext = InvenioCelery(app, entry_point_group=None)
     ext.load_entry_points()
     assert 'conftest.shared_compute' in ext.celery.tasks.keys()
-    assert 'first_tasks.first_task' not in ext.celery.tasks.keys()
-    assert 'second_tasks.second_task_a' not in ext.celery.tasks.keys()
-    assert 'second_tasks.second_task_b' not in ext.celery.tasks.keys()
+    assert 'bpackage.first_tasks.first_task' not in ext.celery.tasks.keys()
+    assert 'bpackage.second_tasks.second_task_a' not in ext.celery.tasks.keys()
+    assert 'bpackage.second_tasks.second_task_b' not in ext.celery.tasks.keys()
+    assert 'apackage.third_tasks.third_task' not in ext.celery.tasks.keys()
 
 
 @patch("pkg_resources.iter_entry_points", _mock_entry_points)
 def test_worker_loading(app):
     """Test that tasks are only loaded on the worker."""
     ext = InvenioCelery(app)
-    assert 'first_tasks.first_task' not in ext.celery.tasks.keys()
+    assert 'bpackage.first_tasks.first_task' not in ext.celery.tasks.keys()
     ext.celery.loader.import_default_modules()
-    assert 'first_tasks.first_task' in ext.celery.tasks.keys()
+    assert 'bpackage.first_tasks.first_task' in ext.celery.tasks.keys()
 
 
 def test_get_queues(app):
