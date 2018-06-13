@@ -25,7 +25,7 @@ Invenio modules that wish to define Celery tasks should use the
 
     @shared_task
     def sum(x, y):
-     return x + y
+         return x + y
 
 Additionally the Invenio module should add the task module into the
 ``invenio_celery.tasks`` entry point:

@@ -23,10 +23,12 @@ def app(request):
     """Flask app fixture."""
     app = Flask("testapp")
     app.config.update(dict(
-        CELERY_ALWAYS_EAGER=True,
-        CELERY_RESULT_BACKEND="cache",
+        CELERY_ALWAYS_EAGER=True,  # v3
         CELERY_CACHE_BACKEND="memory",
-        CELERY_EAGER_PROPAGATES_EXCEPTIONS=True
+        CELERY_EAGER_PROPAGATES_EXCEPTIONS=True,  # v3
+        CELERY_RESULT_BACKEND="cache",
+        CELERY_TASK_ALWAYS_EAGER=True,  # v4
+        CELERY_TASK_EAGER_PROPAGATES=True,  # v4
     ))
 
     @shared_task
