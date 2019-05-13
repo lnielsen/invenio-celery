@@ -45,7 +45,7 @@ install_requires = [
     'Flask-CeleryExt>=0.3.0',
     'Flask>=0.11',
     'redis>=2.10.0',
-    'msgpack-python>=0.4.6',
+    'msgpack>=0.5.2',
 ]
 
 packages = find_packages()
