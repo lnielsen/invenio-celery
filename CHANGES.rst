@@ -8,6 +8,13 @@
 Changes
 =======
 
+Version 1.1.0 (released 2019-06-21)
+
+- Changed the ``msgpack-python`` dependency to ``msgpack``.
+  Please first uninstall ``msgpack-python`` before installing
+  the new ``msgpack`` dependency (``pip uninstall msgpack-python``).
+
+
 Version 1.0.1 (released 2018-12-06)
 
 - Adds support for Celery v4.2. Technically this change is backward
