@@ -1,12 +1,16 @@
 ..
     This file is part of Invenio.
-    Copyright (C) 2015-2018 CERN.
+    Copyright (C) 2015-2020 CERN.
 
     Invenio is free software; you can redistribute it and/or modify it
     under the terms of the MIT License; see LICENSE file for more details.
 
 Changes
 =======
+
+Version 1.1.2 (released 2020-02-17)
+
+- Unpinned Celery version to allow support Celery 4.4
 
 Version 1.1.1 (released 2019-11-19)
 
