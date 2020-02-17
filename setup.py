@@ -42,13 +42,14 @@ setup_requires = [
 ]
 
 install_requires = [
-    'Flask-CeleryExt>=0.3.0',
+    'Flask-CeleryExt>=0.3.4',
     'Flask>=0.11',
     'redis>=2.10.0',
-    'msgpack>=0.5.2',
-    # Avoid version 4.3 it breaks the emails with datetime
-    # https://github.com/celery/celery/pull/5606
-    'celery>=4.2.1,<4.3.0',
+    'msgpack>=0.6.2',
+    # Celery 4.3 does not work with msgpack due to v4.3 introducing a
+    # property "date_done" as a datetime object which msgpack cannot
+    # serialize/deserialize - see https://github.com/celery/celery/pull/5606
+    'celery>=4.2.1,!=4.3,>=4.4.0',
 ]
 
 packages = find_packages()
