@@ -10,8 +10,6 @@
 notifications:
   email: false
 
-sudo: false
-
 language: python
 
 cache:
@@ -55,6 +53,7 @@ deploy:
   password:
     secure: "TqALdlle8D0TmtcK1matZGsAVAA6U2ftfUsbgk2xPLzkuU7mHGyOnY9tybcNCzU6cIgYLWUoNvVOP98/VLNarevK9HpkfArKjZMWMb1KyXZDnHV9kf+/G7ASNfkhdPzoBXYP4917zkOld8MaoFjYMcWJOcJV+IdhZPtAWUPWbxd6AxeaNJisRyf1P+1YLLvAKeOYkZS8PNxXmEpKSa3VQDc1CpF/HI9NJtqF/LFK+xu8ngPBlilnaOlAm24UAEmT+FV8UWhm/dzuJPWzojFeNq/61d/oTTwIEbDObI/boOpdsRbSJlPha84A96DK4q2LUgmrE9kTi8zLBKUvz0IH5bMjl9PJ8CVqkPy859dXnpg6LMA5RQEhSZ6/4HDfoTmn/Q+vU0VmuMLplQcxWEsIBJCM4nlt5wOEXQfotjAIcvd5c7cGZspL4mAe1sMQUtx5OnTI0MTExQw/C7LVRHYcbC6eXb7utXDqiJmk1yMKIDWFCHSmCsViV/U0Tc1Hj+dGaYdoYFefAS2RzBWZ6TnCES66CcuAEM2ftsSEUlHMKu25OLATB/v0EpP9r2DG6KKR5mHYgn1GY8fKAYPbDQqU5Y1GNhg0Fn9Z4hU6iXDTkg0wL/IhaQPDtSEq2lQrjDrwGb/hHlPPVfY6dWqTxGsJus6v2atzfwumigdk9O52HHU="
   distributions: "sdist bdist_wheel"
+  skip_existing: true
   on:
     tags: true
     python: "3.8"
