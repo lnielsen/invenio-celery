@@ -8,6 +8,10 @@
 Changes
 =======
 
+Version 1.2.0 (released 2020-03-05)
+
+- added dependency on invenio-base to centralise package management
+
 Version 1.1.3 (released 2020-02-21)
 
 - Removed redundant version specifier for Celery dependency.
