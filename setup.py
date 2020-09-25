@@ -16,19 +16,19 @@ readme = open('README.rst').read()
 history = open('CHANGES.rst').read()
 
 tests_require = [
-    'check-manifest>=0.25',
-    'coverage>=4.0',
-    'isort>=4.2.2',
     'mock>=1.3.0',
-    'pydocstyle>=1.0.0',
-    'pytest-cov>=1.8.0',
-    'pytest-pep8>=1.0.6',
-    'pytest>=3.8.0,<5.0.0',
+    'pytest-invenio>=1.3.4',
+    # TODO: Remove all lines below with pytest-invenio v1.4.0:
+    "pytest-cov>=2.10.1",
+    "pytest-isort>=1.2.0",
+    "pytest-pycodestyle>=2.2.0",
+    "pytest-pydocstyle>=2.2.0",
+    "pytest>=6,<7",
 ]
 
 extras_require = {
     'docs': [
-        "Sphinx>=1.4.2",
+        "Sphinx>=3",
     ],
     'tests': tests_require,
 }
@@ -42,14 +42,12 @@ setup_requires = [
 ]
 
 install_requires = [
+    'celery>=4.4.0,<5.1',
     'Flask-CeleryExt>=0.3.4',
-    'redis>=2.10.0',
+    'invenio-base>=1.2.3',
     'msgpack>=0.6.2',
-    # Celery 4.3 does not work with msgpack due to v4.3 introducing a
-    # property "date_done" as a datetime object which msgpack cannot
-    # serialize/deserialize - see https://github.com/celery/celery/pull/5606
-    'celery>=4.2.1,!=4.3',
-    'invenio-base>=1.2.2',
+    'pytest-celery>=0.0.0a1',
+    'redis>=2.10.0',
 ]
 
 packages = find_packages()
