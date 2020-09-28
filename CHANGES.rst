@@ -8,6 +8,13 @@
 Changes
 =======
 
+Version 1.2.1 (released 2020-09-28)
+
+- Change version bounds on Celery to 4.4 to 5.1.
+
+- Adds dependency on pytest-celery which now installs the celery_config pytest
+  fixture.
+
 Version 1.2.0 (released 2020-03-05)
 
 - added dependency on invenio-base to centralise package management
